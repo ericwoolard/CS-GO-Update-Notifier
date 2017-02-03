@@ -7,7 +7,7 @@ REQUIREMENTS
 
 How to use
 ----------
-1. Place CUNT in a new directory (~/CUNT/ will do)
+1. Place the tool in a new directory
 2. Edit alert message and token in slack_alerts.py & telegram_alerts.py
 3. Start the script in the background with: `python csgo_update_notifier.py &` 
 4. You may choose to run the script with nohup, which will ignore the hangup signal similar to using `&`, but will allow you to
