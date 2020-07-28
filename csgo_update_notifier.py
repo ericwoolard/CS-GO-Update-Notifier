@@ -1,12 +1,14 @@
-from steam import SteamClient
+from steam.client import SteamClient
 import json
-import datetime
+from datetime import datetime
 import time
 import traceback
+import logging
 # Project Imports
 import file_manager
 import slack_alerts
 import telegram_alerts
+import discord_alerts
 
 #############################################################
 # This script was written by Warlord (/u/zebradolphin5) for #
@@ -22,7 +24,7 @@ def setup():
         client.anonymous_login()
     except:
         error_message = traceback.format_exc()
-        now = str(datetime.datetime.now())
+        now = str(datetime.now())
         print(now + ' - Error:\n' + error_message + '\n\n\n')
         time.sleep(60)
         setup()
@@ -44,22 +46,24 @@ def checkForUpdates(client):
             bIDCache = cacheFile['build_ID']
 
             if currentBuild != bIDCache:
-                print('New update found! Alerting Slack...')
+                print('New update found! Sending alerts...')
                 file_manager.updateJson('cache.json', currentBuild)
                 slack_alerts.sendAlert(currentBuild)
                 telegram_alerts.sendAlert(currentBuild)
+                discord_alerts.setup(currentBuild)
 
             time.sleep(10)
 
         except AttributeError:
             error_message = traceback.format_exc()
-            now = str(datetime.datetime.now())
+            now = str(datetime.now())
             print(now + ' - Error:\n' + error_message + '\n\n\n')
             client.logout()
             time.sleep(60)
             setup()
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO, format='%(process)d %(message)s')
     setup()
 
 # TODO Make this work when an update is pushed to the beta branch
