@@ -21,7 +21,7 @@ import discord_alerts
 def setup():
     client = SteamClient()
     try:
-        client.anonymous_login()
+        client.login(username='', password='', auth_code='')
     except:
         error_message = traceback.format_exc()
         now = str(datetime.now())
